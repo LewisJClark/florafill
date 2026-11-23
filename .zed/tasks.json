@@ -1,0 +1,16 @@
+[
+  {
+    "label": "Build",
+    "command": "./build.bat",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false
+  },
+  {
+    "label": "Run",
+    "command": "imp.exe",
+    "args": ["$ZED_WORKTREE_ROOT/game.dll"],
+    "use_new_terminal": false,
+    "allow_concurrent_runs": true
+  },
+
+]
