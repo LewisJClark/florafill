@@ -39,6 +39,8 @@ __declspec(dllexport) void game_load(ImpAPI *api) {
    imp.draw_set_font(game->fnt_quaver);
    imp.input_hide_mouse();
    screen_swap(SCREEN_MAIN_MENU);
+
+   imp.fs_enable_hot_reload();
 }
 
 

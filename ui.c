@@ -53,9 +53,13 @@ void ui_currency_box(void) {
    static int w = 97;
    static int h = 48;
    imp.draw_npatch(game->npatch_textbox, x, y, w, h);
+   imp.draw_sprite(game->spr_ui_coin_icon, 0, x + 9, y + 9, 1, 1, 0);
+   imp.draw_sprite(game->spr_ui_cutting_icon, 0, x + 9, y + 21, 1, 1, 0);
+   imp.draw_sprite(game->spr_ui_plus_icon, 0, x + 9, y + 33, 1, 1, 0);
    imp.draw_set_color(COL_GOLD);
-   imp.draw_text("Coins", x + 6, y + 6);
+   imp.draw_text("Coins", x + 15, y + 6);
    imp.draw_set_color(COL_GREEN);
-   imp.draw_text("Cuttings", x + 6, y + 24);
+   imp.draw_text("Cuttings", x + 15, y + 18);
    imp.draw_set_color(COL_WHITE);
+   imp.draw_text("Upgrades", x + 15, y + 30);
 }
