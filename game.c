@@ -1,4 +1,4 @@
-#include "florafill.h"
+#include "game.h"
 
 //*************************************************************************************
 // Swaps to the new screen, calling *_leave for the old screen
@@ -9,7 +9,7 @@ void screen_swap(ScreenType new_screen) {
          default: break;
 
          #define X(upper, lower) case SCREEN_##upper: lower##_leave(); break;
-         #include "_screen_types.h"
+         #include "x_screens.h"
          #undef X
       }
    }
@@ -20,7 +20,7 @@ void screen_swap(ScreenType new_screen) {
       default: break;
 
       #define X(upper, lower) case SCREEN_##upper: lower##_enter(); break;
-      #include "_screen_types.h"
+      #include "x_screens.h"
       #undef X
    }
 }

@@ -1,0 +1,4 @@
+X(npatch_button_normal, game->tex_sprites, 48, 0, 16, 16, 2, 2, 2, 2)
+X(npatch_button_hovered, game->tex_sprites, 64, 0, 16, 16, 2, 2, 2, 2)
+X(npatch_button_pressed, game->tex_sprites, 80, 0, 16, 16, 2, 2, 2, 2)
+X(npatch_textbox, game->tex_sprites, 96, 0, 16, 16, 2, 2, 2, 2)
