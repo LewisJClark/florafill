@@ -2,21 +2,21 @@
 #include "game.h"
 
 //*************************************************************************************
-int entity_weed_create(float x, float y) {
+int entity_create_weed(float x, float y) {
 
 }
 
 //*************************************************************************************
-void entity_weed_update(Entity *e, float dt) {
+void entity_update_weed(Entity *e, float dt) {
 
 }
 
 //*************************************************************************************
-void entity_weed_draw(Entity *e) {
+void entity_draw_weed(Entity *e) {
 
 }
 
 //*************************************************************************************
-void entity_weed_destroy(Entity *e) {
+void entity_destroy_weed(Entity *e) {
 
 }

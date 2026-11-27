@@ -21,6 +21,7 @@ __declspec(dllexport) void game_load(ImpAPI *api) {
 
    game = imp.alloc_game_data(sizeof(GameData));
    game->screen_scratch = imp.alloc(10240000);
+   game->camera = imp.camera_create(0, 0, BASE_WIDTH, BASE_HEIGHT);
 
    imp.window_set_title("Florafill");
    imp.window_set_fps(144);

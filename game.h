@@ -19,6 +19,8 @@
 #define BASE_WIDTH 640
 #define BASE_HEIGHT 360
 
+#define GARDEN_SIZE 1024
+
 //*************************************************************************************
 // SCREENS
 
@@ -97,6 +99,9 @@ typedef struct {
    float yspeed;
 } Entity;
 
+void entity_update(Entity *e, float dt);
+void entity_draw(Entity *e);
+
 #define X(lower, upper, ...) int entity_create_##lower(__VA_ARGS__);
 #include "x_entities.h"
 #undef X
@@ -119,6 +124,7 @@ typedef struct {
    bool show_debug;
    char text_scratch[2048];
    const char *ui_hover_text;
+   ImpHandle camera;
 
    Entity entities[ENTITY_MAX];
 

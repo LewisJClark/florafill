@@ -15,10 +15,27 @@ Entity *entity_ptr_from_handle(int handle) {
    if (handle == -1)
       return NULL;
 
-   if (!game->entities[handle].active)
-      return NULL;
-
    return &game->entities[handle];
+}
+
+//*************************************************************************************
+void entity_update(Entity *e, float dt) {
+   switch (e->type) {
+      default: break;
+      #define X(lower, upper, ...) case ENT_##upper: entity_update_##lower(e, dt); break;
+      #include "x_entities.h"
+      #undef X
+   }
+}
+
+//*************************************************************************************
+void entity_draw(Entity *e) {
+   switch (e->type) {
+      default: break;
+      #define X(lower, upper, ...) case ENT_##upper: entity_draw_##lower(e); break;
+      #include "x_entities.h"
+      #undef X
+   }
 }
 
 
