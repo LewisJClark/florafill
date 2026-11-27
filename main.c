@@ -1,10 +1,16 @@
 #include "game.h"
 #include <imp.h>
 
+#define LEWTILS_IMPL
+#include "lewtils.h"
+#undef LEWTILS_IMPL
+
 #include "game.c"
 #include "ui.c"
 #include "screen_main_menu.c"
 #include "screen_garden.c"
+#include "entity_visitor.c"
+#include "entity_weed.c"
 
 GameData *game;
 ImpAPI imp = {0};
@@ -53,6 +59,13 @@ __declspec(dllexport) void game_reload(ImpAPI *api, void *game_data) {
 
 //*************************************************************************************
 __declspec(dllexport) void game_tick(float dt) {
+   game->delta_time = dt;
+
+   // Clear the hover text every frame - if something wants it, then it
+   // has to set it every frame. Keeps managing who's setting/clearing it
+   // simpler.
+   game->ui_hover_text = NULL;
+
    ImpPoint mouse_pos = imp.input_get_mouse_pos();
 
    switch (game->screen) {
@@ -71,7 +84,8 @@ __declspec(dllexport) void game_tick(float dt) {
       imp.draw_set_color(COL_BLACK_TRANSPARENT);
       imp.draw_rect(0, 0, BASE_WIDTH, 16, true);
       imp.draw_set_color(COL_WHITE);
-      imp.draw_text("FPS:", 3, 3);
+      sprintf(game->text_scratch, "FPS: %3.1f", 1.0f / dt);
+      imp.draw_text(game->text_scratch, 3, 3, 0);
       imp.draw_end();
    }
 

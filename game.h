@@ -43,6 +43,12 @@ const char *screen_names[SCREEN_COUNT] = {
 #include "x_screens.h"
 #undef X
 
+typedef struct {
+   uint64_t coins;
+   uint64_t cuttings;
+   uint64_t next_flower_cost;
+} GardenScreenState;
+
 //*************************************************************************************
 // UI
 
@@ -55,21 +61,71 @@ typedef struct {
    uint8_t hovered;
    uint8_t pressed;
    uint8_t center_text;
+   float hovered_time;
+   const char *hover_text;
 } UiElement;
 
 bool ui_button(UiElement *element);
 void ui_currency_box(void);
+void ui_hover_text(float x, float y, const char *text);
+float ui_get_area_hovered_time(float current_time, float x, float y, float w, float h);
+
+//*************************************************************************************
+// ENTITIES
+
+#define ENTITY_MAX 4096
+
+typedef enum {
+   ENT_NONE,
+   #define X(lower, upper, ...) ENT_##upper,
+   #include "x_entities.h"
+   #undef X
+   ENT_COUNT
+} EntityType;
+
+typedef struct {
+   bool active;
+   EntityType type;
+   float x;
+   float y;
+   ImpHandle sprite;
+   float sprite_frame;
+   float sprite_xscale;
+   float sprite_yscale;
+   float sprite_angle;
+   float xspeed;
+   float yspeed;
+} Entity;
+
+#define X(lower, upper, ...) int entity_create_##lower(__VA_ARGS__);
+#include "x_entities.h"
+#undef X
+#define X(lower, upper, ...) void entity_update_##lower(Entity *e, float dt);
+#include "x_entities.h"
+#undef X
+#define X(lower, upper, ...) void entity_draw_##lower(Entity *e);
+#include "x_entities.h"
+#undef X
+#define X(lower, upper, ...) void entity_destroy_##lower(Entity *e);
+#include "x_entities.h"
+#undef X
 
 //*************************************************************************************
 // GAME DATA
 
 typedef struct {
 
+   float delta_time;
    bool show_debug;
+   char text_scratch[2048];
+   const char *ui_hover_text;
+
+   Entity entities[ENTITY_MAX];
 
    // Screen specific stuff.
    ScreenType screen;          // What screen are we on?
    void * screen_scratch;      // Scratch memory for per-screen state.
+   GardenScreenState garden_state;
 
    // Asset & input handles.
    ImpHandle fnt_quaver;
@@ -86,5 +142,7 @@ extern GameData *game;
 extern ImpAPI imp;
 
 void screen_swap(ScreenType new_screen);
+int entity_get_free_handle(void);
+Entity *entity_ptr_from_handle(int handle);
 
 #endif // FLORAFILL_H

@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+typedef void *(*LewAlloc)(size_t size);
+typedef void (*LewFree)(void *ptr);
+
+void lew_set_alloc(LewAlloc alloc_proc);
+void lew_set_free(LewFree free_proc);
+
 typedef struct {
    void *base;
    size_t size;
@@ -11,16 +17,20 @@ typedef struct {
    size_t committed;
 } MemArena;
 
-typedef void *(*LewAlloc)(size_t size);
-typedef void (*LewFree)(void *ptr);
-
-void lew_set_alloc(LewAlloc alloc_proc);
-void lew_set_free(LewFree free_proc);
-
 MemArena *lew_arena_create(size_t size);
 void lew_arena_destroy(MemArena *arena);
 void *lew_arena_alloc(MemArena *arena, size_t size);
 void lew_arena_clear(MemArena *arena);
+
+typedef struct {
+   bool repeat;
+   bool running;
+   float duration;
+   float remaining;
+} Timer;
+
+Timer timer_create(float duration, bool repeat);
+bool timer_tick(Timer *timer, float dt);
 
 #endif // LEWTILS_H
 
@@ -95,6 +105,32 @@ void *lew_arena_alloc(MemArena *arena, size_t size) {
 void lew_arena_clear(MemArena *arena) {
    arena->offset = 0;
    arena->committed = 0;
+}
+
+//*************************************************************************************
+Timer timer_create(float duration, bool repeat) {
+   return (Timer){
+      .running = true,
+      .repeat = repeat,
+      .duration = duration,
+      .remaining = duration
+   };
+}
+
+//*************************************************************************************
+bool timer_tick(Timer *timer, float dt) {
+
+   if (!timer->running)
+      return false;
+
+   timer->remaining -= dt;
+
+   if (timer->remaining <= 0) {
+      timer->remaining = timer->repeat ? timer->duration : -1;
+      return true;
+   }
+
+   return false;
 }
 
 #endif // LEWTILS_IMPL
